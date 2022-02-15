@@ -71,8 +71,6 @@
     <Message Importance="high" Text="_GitBranch=$(_GitBranch)" />
     <Message Importance="high" Text="GitBaseVersionPatch=$(GitBaseVersionPatch)" />
     <Message Importance="high" Text="GitSemVerDashLabel=$(GitSemVerDashLabel)" />
-    <Message Condition="'$(GitSemVerDashLabel)' != ''" Importance="high" Text="GitBaseVersion: $(GitBaseVersionMajor).$(GitBaseVersionMinor).$(GitCommits)" />
-    <Message Condition="'$(GitSemVerDashLabel)' == ''" Importance="high" Text="GitSemVer: $(GitSemVerMajor).$(GitSemVerMinor).$(GitSemVerPatch)" />
   </Target>
 
 </Project>
