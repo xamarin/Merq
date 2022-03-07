@@ -60,6 +60,15 @@ stages:
       inputs:
         forceReinstallCredentialProvider: true
 
+    - task: jenkins-codesign/signType.v1.yml@templates
+
+    - task: MicroBuildSigningPlugin@2
+      inputs:
+        signType: '$(Xamarin.SignType)'
+        feedSource: 'https://devdiv.pkgs.visualstudio.com/DefaultCollection/_packaging/MicroBuildToolset/nuget/v3/index.json'
+      env:
+        TeamName: '$(TeamName)'
+
     # Disabled due to unreliability in loading the service index for source https://devdiv.pkgs.visualstudio.com/_packaging/xamarin-xvs/nuget/v3/index.json. [C:\Users\VssAdministrator\AppData\Local\Temp\nabauqrz.xry\restore.csproj]
     - powershell: |
         # https://stackoverflow.com/questions/58764322/cannot-install-dotnet-ef-tool-on-windows-10
