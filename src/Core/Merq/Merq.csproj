@@ -31,8 +31,7 @@
 
   <ItemGroup>
     <FilesToSign Include="$(OutDir)\Merq.dll">
-        <Authenticode>AuthenticodeCertFriendlyName</Authenticode>
-        <StrongName>StrongNameCertFriendlyName</StrongName>
+        <Authenticode>Microsoft400</Authenticode>
     </FilesToSign>
   </ItemGroup>
 
