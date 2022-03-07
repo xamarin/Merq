@@ -60,7 +60,7 @@ stages:
       inputs:
         forceReinstallCredentialProvider: true
 
-    - task: jenkins-codesign/signType.v1.yml@templates
+    - template: jenkins-codesign/signType.v1.yml@templates
 
     - task: MicroBuildSigningPlugin@2
       inputs:
