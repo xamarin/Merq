@@ -135,7 +135,7 @@ stages:
       displayName: 'Verify Signed Files'
       inputs:
         TargetFolders: |
-        $(Build.ArtifactStagingDirectory)/package
+          $(Build.ArtifactStagingDirectory)/package
       ExcludeSNVerify: true
 
     - task: PublishBuildArtifacts@1
