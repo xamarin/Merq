@@ -131,6 +131,13 @@ stages:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)/package'
         ArtifactName: package
 
+    - task: MicroBuildCodesignVerify@3
+      displayName: 'Verify Signed Files'
+      inputs:
+        TargetFolders: |
+        $(Build.ArtifactStagingDirectory)/package
+      ExcludeSNVerify: true
+
     - task: PublishBuildArtifacts@1
       displayName: 'Symbols'
       inputs:
