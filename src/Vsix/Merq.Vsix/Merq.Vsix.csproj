@@ -88,14 +88,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <FilesToSign Include="$(OutDir)\Merq.$(PackageVersion).vsix">
-      <Authenticode>VsixSHA2</Authenticode>
-    </FilesToSign>
-  </ItemGroup>
-
-
-
-  <ItemGroup>
     <EmbeddedResource Update="MerqPackage.resx">
       <MergeWithCTO>true</MergeWithCTO>
       <ManifestResourceName>VSPackage</ManifestResourceName>
