@@ -136,7 +136,7 @@ stages:
       inputs:
         TargetFolders: |
           $(Build.ArtifactStagingDirectory)/package
-      ExcludeSNVerify: true
+        ExcludeSNVerify: true
 
     - task: PublishBuildArtifacts@1
       displayName: 'Symbols'
