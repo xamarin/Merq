@@ -69,4 +69,10 @@
     </ItemGroup>
   </Target>
 
+  <ItemGroup>
+    <FilesToSign Include="$(OutDir)\Merq.Core.*.nupkg">
+        <Authenticode>NuGet</Authenticode>
+    </FilesToSign>
+  </ItemGroup>
+
 </Project>
