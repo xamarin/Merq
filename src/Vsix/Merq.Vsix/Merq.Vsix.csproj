@@ -82,10 +82,27 @@
   </ItemGroup>
 
   <ItemGroup>
-    <FilesToSign Include="$(IntermediateOutputPath)\Merq.Vsix.dll">
-        <Authenticode>Microsoft400</Authenticode>
-    </FilesToSign>
+    <PackageReference Include="Microsoft.VisualStudioEng.MicroBuild.Core" Version="1.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
+
+  <Target Name="GetFilesToSign" BeforeTargets="CreateVsixContainer;SignFiles" Condition="'$(Configuration)' == 'Release'">
+    <ItemGroup>
+      <FilesToSign Include="$(OutDir)\Merq.Vsix.dll">
+        <Authenticode>Microsoft400</Authenticode>
+      </FilesToSign>
+    </ItemGroup>
+  </Target>
+
+  <Target Name="SignVsix" BeforeTargets="SignFiles" DependsOnTargets="GetFilesToSign;CreateVsixContainer" Condition="'$(Configuration)' == 'Release'">
+    <ItemGroup>
+      <FilesToSign Include="$(TargetVsixContainer)">
+        <Authenticode>VsixSHA2</Authenticode>
+      </FilesToSign>
+    </ItemGroup>
+  </Target>
 
   <ItemGroup>
     <EmbeddedResource Update="MerqPackage.resx">
