@@ -137,6 +137,7 @@ stages:
         TargetFolders: |
           $(Build.ArtifactStagingDirectory)/package
         ExcludeSNVerify: true
+        ApprovalListPathForCerts: '$(Build.SourcesDirectory)/signexclusionlist.csv'
 
     - task: PublishBuildArtifacts@1
       displayName: 'Symbols'
