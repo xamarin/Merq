@@ -64,10 +64,10 @@ stages:
 
     - task: MicroBuildSigningPlugin@2
       inputs:
-        signType: '$(Xamarin.SignType)'
+        signType: "$(Xamarin.SignType)"
         feedSource: 'https://devdiv.pkgs.visualstudio.com/DefaultCollection/_packaging/MicroBuildToolset/nuget/v3/index.json'
       env:
-        TeamName: '$(TeamName)'
+        TeamName: "VSCX Platform Tools"
 
     # Disabled due to unreliability in loading the service index for source https://devdiv.pkgs.visualstudio.com/_packaging/xamarin-xvs/nuget/v3/index.json. [C:\Users\VssAdministrator\AppData\Local\Temp\nabauqrz.xry\restore.csproj]
     - powershell: |
