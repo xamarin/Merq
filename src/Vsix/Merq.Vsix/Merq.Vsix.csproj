@@ -106,10 +106,8 @@
     />
   </Target>
 
-  <Target Name="SignVsix" BeforeTargets="SignFiles" DependsOnTargets="GetFilesToSign;CreateVsixContainer" Condition="'$(Configuration)' == 'Release'">
+  <Target Name="SignVsix" BeforeTargets="SignFiles" DependsOnTargets="GetFilesToSign;CreateVsixContainer;CopyPackagesToOutDir" Condition="'$(Configuration)' == 'Release'">
     <ItemGroup>
-      <!-- Merq.Vsix.dll is signed earlier in the pipeline. Signing again here results in a stall as the file is already locked -->
-      <FilesToSign Exclude="$(IntermediateOutputPath)Merq.Vsix.dll" />
       <FilesToSign Include="$(OutDir)$(TargetVsixContainerName)">
         <Authenticode>VsixSHA2</Authenticode>
       </FilesToSign>
