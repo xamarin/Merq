@@ -81,7 +81,7 @@
     <ItemGroup>
       <NugetFilesToSign Include="$(OutDir)Merq.*.nupkg">
         <Authenticode>NuGet</Authenticode>
-      </FilesToSign>
+      </NugetFilesToSign>
     </ItemGroup>
   </Target>
 
