@@ -34,6 +34,8 @@ variables:
   value: true
 - name: TeamName
   value: "VSCX Platform Tools"
+- name: MainBranch
+  value: refs/heads/main
 
 resources:
   repositories:
