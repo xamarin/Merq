@@ -96,12 +96,19 @@
     </ItemGroup>
   </Target>
 
+  <Target Name="CopyNuGetFilesToOutputDir" BeforeTargets="SignVsix" AfterTargets="CreateVsixContainer">
+    <Copy
+      SourceFiles="$(Out)*.nupkg"
+      DestinationFolder="$(OutDir)"
+    />
+  </Target>
+
   <Target Name="SignVsix" BeforeTargets="SignFiles" DependsOnTargets="GetFilesToSign;CreateVsixContainer" Condition="'$(Configuration)' == 'Release'">
     <ItemGroup>
-      <FilesToSign Include="$(OutDir)\$(TargetVsixContainerName)">
+      <FilesToSign Include="$(OutDir)$(TargetVsixContainerName)">
         <Authenticode>VsixSHA2</Authenticode>
       </FilesToSign>
-      <FilesToSign Include="$(OutDir)\Merq.*.nupkg">
+      <FilesToSign Include="$(OutDir)Merq.*.nupkg">
         <Authenticode>NuGet</Authenticode>
       </FilesToSign>
     </ItemGroup>

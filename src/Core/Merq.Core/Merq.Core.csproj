@@ -8,7 +8,7 @@
     <Summary>Default implementation of core interfaces for ICommandBus and IEventStream</Summary>
     <Description>Default implementation of core interfaces for ICommandBus and IEventStream</Description>
     <InferPackageContents>false</InferPackageContents>
-    <PackageOutputPath>$(OutDir)</PackageOutputPath>
+    <PackageOutputPath>$(Out)</PackageOutputPath>
   </PropertyGroup>
 
   <Import Project="$([MSBuild]::GetPathOfFileAbove('Merq.props', '$(MSBuildThisFileDirectory)'))" />
