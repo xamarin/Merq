@@ -101,6 +101,9 @@
       <FilesToSign Include="$(OutDir)\$(TargetVsixContainerName)">
         <Authenticode>VsixSHA2</Authenticode>
       </FilesToSign>
+      <FilesToSign Include="$(OutDir)\Merq.*.nupkg">
+        <Authenticode>NuGet</Authenticode>
+      </FilesToSign>
     </ItemGroup>
   </Target>
 

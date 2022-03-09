@@ -76,13 +76,4 @@
 		<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 	</ItemGroup>
-
-  <Target Name="SignNupkg" AfterTargets="Pack" Condition="'$(Configuration)' == 'Release'">
-    <ItemGroup>
-      <NugetFilesToSign Include="$(OutDir)Merq.*.nupkg">
-        <Authenticode>NuGet</Authenticode>
-      </NugetFilesToSign>
-    </ItemGroup>
-  </Target>
-
 </Project>
