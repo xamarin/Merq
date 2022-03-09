@@ -12,7 +12,6 @@
     <IncludeContentInPackage>false</IncludeContentInPackage>
     <IncludeContentInPack>false</IncludeContentInPack>
     <IncludeGlobalAssemblyInfo>false</IncludeGlobalAssemblyInfo>
-    <PackageOutputPath>$(Out)</PackageOutputPath>
   </PropertyGroup>
 
   <Import Project="$([MSBuild]::GetPathOfFileAbove('Merq.props', '$(MSBuildThisFileDirectory)'))" />
