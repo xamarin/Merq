@@ -96,9 +96,9 @@
     </ItemGroup>
   </Target>
 
-  <Target Name="CopyNuGetFilesToOutputDir" BeforeTargets="SignVsix" AfterTargets="CreateVsixContainer">
+  <Target Name="CopyNuGetFilesToOutputDir" BeforeTargets="SignVsix" AfterTargets="CreateVsixContainer" Condition="'$(Configuration)' == 'Release'">
     <Copy
-      SourceFiles="$(Out)*.nupkg"
+      SourceFiles="$(PackageOutputPath)Merq.*.nupkg"
       DestinationFolder="$(OutDir)"
     />
   </Target>
