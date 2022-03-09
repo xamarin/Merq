@@ -8,6 +8,7 @@
     <Summary>Default implementation of core interfaces for ICommandBus and IEventStream</Summary>
     <Description>Default implementation of core interfaces for ICommandBus and IEventStream</Description>
     <InferPackageContents>false</InferPackageContents>
+    <PackageOutputPath>$(OutDir)</PackageOutputPath>
   </PropertyGroup>
 
   <Import Project="$([MSBuild]::GetPathOfFileAbove('Merq.props', '$(MSBuildThisFileDirectory)'))" />
@@ -69,9 +70,16 @@
     </ItemGroup>
   </Target>
 
-  <Target Name="SignVsix" DependsOnTargets="Pack" Condition="'$(Configuration)' == 'Release'">
+  <ItemGroup>
+		<PackageReference Include="Microsoft.VisualStudioEng.MicroBuild.Core" Version="1.0.0">
+		<PrivateAssets>all</PrivateAssets>
+		<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+  <Target Name="SignNupkg" AfterTargets="Pack" Condition="'$(Configuration)' == 'Release'">
     <ItemGroup>
-      <FilesToSign Include="$(OutDir)Merq.*.nupkg">
+      <NugetFilesToSign Include="$(OutDir)Merq.*.nupkg">
         <Authenticode>NuGet</Authenticode>
       </FilesToSign>
     </ItemGroup>

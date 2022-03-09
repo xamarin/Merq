@@ -83,11 +83,4 @@
 	<Target Name="BuildOnlySettings" />
 
 	<Import Project="Directory.Build.targets" />
-
-	<ItemGroup>
-		<PackageReference Include="Microsoft.VisualStudioEng.MicroBuild.Core" Version="1.0.0">
-		<PrivateAssets>all</PrivateAssets>
-		<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-	</ItemGroup>
 </Project>
