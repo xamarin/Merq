@@ -90,7 +90,7 @@
 
   <Target Name="GetFilesToSign" BeforeTargets="CreateVsixContainer;SignFiles" Condition="'$(Configuration)' == 'Release'">
     <ItemGroup>
-      <FilesToSign Include="$(OutDir)\Merq.Vsix.dll">
+      <FilesToSign Include="$(IntermediateOutputPath)\Merq.Vsix.dll">
         <Authenticode>Microsoft400</Authenticode>
       </FilesToSign>
     </ItemGroup>
