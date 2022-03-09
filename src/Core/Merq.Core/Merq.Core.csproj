@@ -68,4 +68,13 @@
       <PackageFile Include="Merq" Kind="Dependency" Version="$(MerqVersion)" />
     </ItemGroup>
   </Target>
+
+  <Target Name="SignVsix" DependsOnTargets="Pack" Condition="'$(Configuration)' == 'Release'">
+    <ItemGroup>
+      <FilesToSign Include="$(OutDir)Merq.*.nupkg">
+        <Authenticode>NuGet</Authenticode>
+      </FilesToSign>
+    </ItemGroup>
+  </Target>
+
 </Project>

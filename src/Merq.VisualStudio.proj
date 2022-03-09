@@ -90,10 +90,4 @@
 		<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 	</ItemGroup>
-
-	<ItemGroup>
-		<FilesToSign Include="$(OutDir)\Merq.*.nupkg">
-			<Authenticode>NuGet</Authenticode>
-		</FilesToSign>
-	</ItemGroup>
 </Project>
