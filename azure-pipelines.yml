@@ -89,7 +89,7 @@ stages:
       displayName: 'Set CodeSignOverride'
 
     - template: jenkins-codesign/signType.v1.yml@templates
-      inputs:
+      parameters:
         CodeSignOverride: "$(CodeSignOverride)"
 
     - task: MicroBuildSigningPlugin@2
