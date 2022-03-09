@@ -117,7 +117,7 @@
     </ItemGroup>
   </Target>
 
-  <Target Name="CopySignedNuGetFilesToOutputDir" AfterTargets="SignVsix" Condition="'$(Configuration)' == 'Release'">
+  <Target Name="CopySignedNuGetFilesToOutputDir" AfterTargets="SignFiles" Condition="'$(Configuration)' == 'Release'">
     <ItemGroup>
       <SignedFiles Include="$(OutDir)*.nupkg" />
       <SignedFiles Include="$(OutDir)$(TargetVsixContainerName)" />
