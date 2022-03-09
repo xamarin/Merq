@@ -97,8 +97,11 @@
   </Target>
 
   <Target Name="CopyNuGetFilesToOutputDir" BeforeTargets="SignVsix" AfterTargets="CreateVsixContainer" Condition="'$(Configuration)' == 'Release'">
+    <ItemGroup>
+      <NupkgFiles Include="$(PackageOutputPath)Merq.*.nupkg" />
+    </ItemGroup>
     <Copy
-      SourceFiles="$(PackageOutputPath)Merq.*.nupkg"
+      SourceFiles="@(NupkgFiles)"
       DestinationFolder="$(OutDir)"
     />
   </Target>
@@ -112,6 +115,17 @@
         <Authenticode>NuGet</Authenticode>
       </FilesToSign>
     </ItemGroup>
+  </Target>
+
+  <Target Name="CopySignedNuGetFilesToOutputDir" AfterTargets="SignVsix" Condition="'$(Configuration)' == 'Release'">
+    <ItemGroup>
+      <SignedFiles Include="$(OutDir)*.nupkg" />
+      <SignedFiles Include="$(OutDir)$(TargetVsixContainerName)" />
+    </ItemGroup>
+    <Copy
+      SourceFiles="@(SignedFiles)"
+      DestinationFolder="$(PackageOutputPath)"
+    />
   </Target>
 
   <ItemGroup>
