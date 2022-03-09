@@ -23,6 +23,8 @@ variables:
   value: $(Build.ArtifactStagingDirectory)/package
 - name: System.Debug
   value: true
+- name: TeamName
+  value: "VSCX Platform Tools"
 
 resources:
   repositories:
@@ -67,7 +69,7 @@ stages:
         signType: "$(Xamarin.SignType)"
         feedSource: 'https://devdiv.pkgs.visualstudio.com/DefaultCollection/_packaging/MicroBuildToolset/nuget/v3/index.json'
       env:
-        TeamName: "VSCX Platform Tools"
+        TeamName: "$(TeamName)"
 
     # Disabled due to unreliability in loading the service index for source https://devdiv.pkgs.visualstudio.com/_packaging/xamarin-xvs/nuget/v3/index.json. [C:\Users\VssAdministrator\AppData\Local\Temp\nabauqrz.xry\restore.csproj]
     - powershell: |
