@@ -98,7 +98,7 @@
     />
   </Target-->
 
-  <Target Name="GetFilesToSign" BeforeTargets="SignVsixContentFiles" DependsOnTargets="CopyDllToSign" Condition="'$(Configuration)' == 'Release'">
+  <Target Name="GetFilesToSign" BeforeTargets="SignVsixContentFiles" Condition="'$(Configuration)' == 'Release'">
     <ItemGroup>
       <FilesToSign Include="$(IntermediateOutputPath)Merq.Vsix.temp.dll">
         <Authenticode>Microsoft400</Authenticode>
@@ -126,7 +126,7 @@
     />
   </Target>
 
-  <Target Name="SignVsix" BeforeTargets="SignFiles" DependsOnTargets="MoveSignedDllBack;GetFilesToSign;CreateVsixContainer;CopyNuGetFilesToOutputDir" Condition="'$(Configuration)' == 'Release'">
+  <Target Name="SignVsix" BeforeTargets="SignFiles" DependsOnTargets="GetFilesToSign;CreateVsixContainer;CopyNuGetFilesToOutputDir" Condition="'$(Configuration)' == 'Release'">
     <ItemGroup>
       <FilesToSign Include="$(OutDir)$(TargetVsixContainerName)">
         <Authenticode>VsixSHA2</Authenticode>
