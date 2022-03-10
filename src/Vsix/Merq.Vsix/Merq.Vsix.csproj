@@ -90,24 +90,10 @@
 
   <Target Name="GetFilesToSign" BeforeTargets="CreateVsixContainer;SignFiles" Condition="'$(Configuration)' == 'Release'">
     <ItemGroup>
-      <FilesToSign Include="$(OutDir)Merq.Vsix.dll">
+      <FilesToSign Include="$(IntermediateOutputPath)Merq.Vsix.dll">
         <Authenticode>Microsoft400</Authenticode>
       </FilesToSign>
     </ItemGroup>
-  </Target>
-
-  <!--
-    HACK: Signing the intermediate output Merq.Vsix.dll can't happen because it's being used by another process
-    Instead sign the copy in bin and move it to obj before packing the vsix
-   -->
-  <Target Name="CopySignedDllToIntermediateOutput" BeforeTargets="CreateVsixContainer" AfterTargets="SignVsixContentFiles" Condition="'$(Configuration)' == 'Release'">
-    <ItemGroup>
-      <SignedDll Include="$(OutDir)Merq.Vsix.dll" />
-    </ItemGroup>
-    <Copy
-      SourceFiles="@(SignedDll)"
-      DestinationFolder="$(IntermediateOutputPath)"
-    />
   </Target>
 
   <Target Name="CopyNuGetFilesToOutputDir" BeforeTargets="SignVsix" AfterTargets="CreateVsixContainer" Condition="'$(Configuration)' == 'Release'">
