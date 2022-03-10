@@ -88,12 +88,32 @@
     </PackageReference>
   </ItemGroup>
 
-  <Target Name="GetFilesToSign" BeforeTargets="SignVsixContentFiles" Condition="'$(Configuration)' == 'Release'">
+  <Target Name="CopyDllToSign" BeforeTargets="GetFilesToSign" Condition="'$(Configuration)' == 'Release'">
     <ItemGroup>
-      <FilesToSign Include="$(IntermediateOutputPath)Merq.Vsix.dll">
+      <DllToCopy Include="$(IntermediateOutputPath)Merq.Vsix.dll" />
+    </ItemGroup>
+    <Copy
+      SourceFiles="@(DllToCopy)"
+      DestinationFiles="$(IntermediateOutputPath)Merq.Vsix.temp.dll"
+    />
+  </Target>
+
+  <Target Name="GetFilesToSign" BeforeTargets="SignVsixContentFiles" DependsOnTargets="CopyDllToSign" Condition="'$(Configuration)' == 'Release'">
+    <ItemGroup>
+      <FilesToSign Include="$(IntermediateOutputPath)Merq.Vsix.temp.dll">
         <Authenticode>Microsoft400</Authenticode>
       </FilesToSign>
     </ItemGroup>
+  </Target>
+
+  <Target Name="MoveSignedDllBack" DependsOnTargets="SignVsixContentFiles" BeforeTargets="CreateVsixContainer">
+    <ItemGroup>
+      <DllToCopy Include="$(IntermediateOutputPath)Merq.Vsix.temp.dll" />
+    </ItemGroup>
+    <Move
+      SourceFiles="@(DllToCopy)"
+      DestinationFiles="$(IntermediateOutputPath)Merq.Vsix.dll"
+    />
   </Target>
 
   <Target Name="CopyNuGetFilesToOutputDir" BeforeTargets="SignVsix" AfterTargets="CreateVsixContainer" Condition="'$(Configuration)' == 'Release'">
@@ -106,7 +126,7 @@
     />
   </Target>
 
-  <Target Name="SignVsix" BeforeTargets="SignFiles" DependsOnTargets="GetFilesToSign;CreateVsixContainer;CopyNuGetFilesToOutputDir" Condition="'$(Configuration)' == 'Release'">
+  <Target Name="SignVsix" BeforeTargets="SignFiles" DependsOnTargets="MoveSignedDllBack;GetFilesToSign;CreateVsixContainer;CopyNuGetFilesToOutputDir" Condition="'$(Configuration)' == 'Release'">
     <ItemGroup>
       <FilesToSign Include="$(OutDir)$(TargetVsixContainerName)">
         <Authenticode>VsixSHA2</Authenticode>
