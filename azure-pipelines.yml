@@ -115,7 +115,7 @@ stages:
       inputs:
         solution: src\Merq.sln
         configuration: $(Configuration)
-        msbuildArguments: '-r -v:normal -p:Configuration=$(Configuration) -bl:$(Build.ArtifactStagingDirectory)/logs/build.binlog'   # Note: Setting configuration on the task does not appear to be sufficient. Also set as a build property
+        msbuildArguments: '-r -nr:false -v:normal -p:Configuration=$(Configuration) -bl:$(Build.ArtifactStagingDirectory)/logs/build.binlog'   # Note: Setting configuration on the task does not appear to be sufficient. Also set as a build property
 
     - powershell: |
         $filename = "$(Build.SourcesDirectory)\src\Vsix\Merq.Vsix\obj\$(Configuration)\extension.vsixmanifest"
