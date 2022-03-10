@@ -50,9 +50,7 @@ stages:
   jobs:
   - job: Build
     pool:
-      name: AzurePipelines-EO
-      demands:
-      - ImageOverride -equals AzurePipelinesWindows2022compliant
+      name: VSEngSS-MicroBuild2022-1ES
     steps:
     - checkout: self
       clean: true
