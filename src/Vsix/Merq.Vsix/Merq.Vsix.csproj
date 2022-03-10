@@ -88,15 +88,22 @@
     </PackageReference>
   </ItemGroup>
 
-  <!--Target Name="CopyDllToSign" BeforeTargets="GetFilesToSign" Condition="'$(Configuration)' == 'Release'">
+  <!--
+    See https://github.com/xamarin/UITools/pull/705/commits/4a65bea18148f7ac2ecd34419450eda3550a776a by Thomas Sparks
+
+    TL;DR: ValidateVsixReferencedAssemblies locks the file, preventing Signing from succeeding
+  -->
+  <Target Name="TempRemoveVsixSourceItems" BeforeTargets="ValidateVsixReferencedAssemblies">
     <ItemGroup>
-      <DllToCopy Include="$(IntermediateOutputPath)Merq.Vsix.dll" />
+      <VSIXSourceItem Remove="$(IntermediateOutputPath)Merq.Vsix.dll"/>
     </ItemGroup>
-    <Copy
-      SourceFiles="@(DllToCopy)"
-      DestinationFiles="$(IntermediateOutputPath)Merq.Vsix.temp.dll"
-    />
-  </Target-->
+  </Target>
+
+  <Target Name="ReturnVsixSourceItems" AfterTargets="ValidateVsixReferencedAssemblies">
+    <ItemGroup>
+      <VSIXSourceItem Include="$(IntermediateOutputPath)Merq.Vsix.dll"/>
+    </ItemGroup>
+  </Target>
 
   <Target Name="GetFilesToSign" BeforeTargets="SignVsixContentFiles" Condition="'$(Configuration)' == 'Release'">
     <ItemGroup>
@@ -105,16 +112,6 @@
       </FilesToSign>
     </ItemGroup>
   </Target>
-
-  <!--Target Name="MoveSignedDllBack" DependsOnTargets="SignVsixContentFiles" BeforeTargets="CreateVsixContainer">
-    <ItemGroup>
-      <DllToCopy Include="$(IntermediateOutputPath)Merq.Vsix.temp.dll" />
-    </ItemGroup>
-    <Move
-      SourceFiles="@(DllToCopy)"
-      DestinationFiles="$(IntermediateOutputPath)Merq.Vsix.dll"
-    />
-  </Target-->
 
   <Target Name="CopyNuGetFilesToOutputDir" BeforeTargets="SignVsix" AfterTargets="CreateVsixContainer" Condition="'$(Configuration)' == 'Release'">
     <ItemGroup>
