@@ -68,11 +68,4 @@
       <PackageFile Include="Merq" Kind="Dependency" Version="$(MerqVersion)" />
     </ItemGroup>
   </Target>
-
-  <ItemGroup>
-		<PackageReference Include="Microsoft.VisualStudioEng.MicroBuild.Core" Version="1.0.0">
-		<PrivateAssets>all</PrivateAssets>
-		<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-	</ItemGroup>
 </Project>

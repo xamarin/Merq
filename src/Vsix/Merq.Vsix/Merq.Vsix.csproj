@@ -81,13 +81,6 @@
     <BindingRedirect Include="Merq.Core" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.VisualStudioEng.MicroBuild.Core" Version="1.0.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
-
   <!--
     See https://github.com/xamarin/UITools/pull/705/commits/4a65bea18148f7ac2ecd34419450eda3550a776a by Thomas Sparks
 
