@@ -88,13 +88,13 @@
     </PackageReference>
   </ItemGroup>
 
-  <!--Target Name="GetFilesToSign" AfterTargets="CopyFilesToOutputDirectory" BeforeTargets="CreateVsixContainer;SignFiles" Condition="'$(Configuration)' == 'Release'">
+  <Target Name="GetFilesToSign" AfterTargets="GetVsixVersion" BeforeTargets="CreateVsixContainer;SignFiles" Condition="'$(Configuration)' == 'Release'">
     <ItemGroup>
       <FilesToSign Include="$(IntermediateOutputPath)Merq.Vsix.dll">
         <Authenticode>Microsoft400</Authenticode>
       </FilesToSign>
     </ItemGroup>
-  </Target-->
+  </Target>
 
   <Target Name="CopyNuGetFilesToOutputDir" BeforeTargets="SignVsix" AfterTargets="CreateVsixContainer" Condition="'$(Configuration)' == 'Release'">
     <ItemGroup>
