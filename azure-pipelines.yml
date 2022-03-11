@@ -1,14 +1,5 @@
 name: merq
 
-parameters:
-- name: Signing
-  displayName: 'Signing'
-  type: string
-  default: Test
-  values:
-  - Test
-  - Real
-
 trigger:
   batch: false
   branches:
@@ -72,8 +63,6 @@ stages:
         forceReinstallCredentialProvider: true
 
     - powershell: |
-        $signing = "${{ parameters.Signing }}"
-        Write-Host "Signing: ${signing}"
         $branch = "$(Build.SourceBranch)"
         Write-Host "Branch: ${branch}"
         $buildReason = "$(Build.Reason)"
@@ -81,7 +70,7 @@ stages:
         $codeSignOverride = ''          # Defaulting to empty as opposed to 'false' allows for the template to still determine if signing is needed
         # The template will only set Xamarin.CodeSign to true and enable real sigining for builds triggered against release branches such as 'd17-0'
         # The template does not enable real signing for the main branch and so we enable real signing for main here
-        if ($signing -eq 'Real' -or $branch -eq "$(MainBranch)") {
+        if ($branch -eq "$(MainBranch)") {
           $codeSignOverride = 'true'
         }
         Write-Host "Setting CodeSignOverride: ${codeSignOverride}"
