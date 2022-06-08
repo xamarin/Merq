@@ -19,7 +19,7 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="MSBuilder.ThisAssembly.Project" Version="0.3.3" PrivateAssets="all" />
-    <PackageReference Include="netfx-System.StringResources" Version="3.0.14" PrivateAssets="all" />
+    <PackageReference Include="netfx-System.StringResources" Version="3.2.0-alpha" PrivateAssets="all" />
     <PackageReference Include="Microsoft.CSharp" Version="4.0.1" PrivateAssets="all" />
   </ItemGroup>
 
