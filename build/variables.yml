@@ -1,0 +1,19 @@
+# Common Variables
+
+variables:
+- group: Xamarin-Secrets
+- group: Xamarin Release
+- name: Configuration
+  value: Release
+- name: DotNetVersion
+  value: 3.1.x
+- name: WindowsPoolName
+  value: VSEngSS-MicroBuild2022-1ES
+- name: PackageOutputPath
+  value: $(Build.ArtifactStagingDirectory)/package
+- name: System.Debug
+  value: true
+- name: TeamName
+  value: "VSCX Platform Tools"
+- name: MainBranch
+  value: refs/heads/main
