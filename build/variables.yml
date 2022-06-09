@@ -1,5 +1,16 @@
 # Common Variables
 
+parameters:
+- name: EnableCodeQL
+  type: boolean
+  default: false
+- name: EnableCodeQLTSA
+  type: boolean
+  default: false
+- name: CodeQLTSASettings
+  type: string
+  default: ''
+
 variables:
 - group: Xamarin-Secrets
 - group: Xamarin Release
@@ -17,3 +28,9 @@ variables:
   value: "VSCX Platform Tools"
 - name: MainBranch
   value: refs/heads/main
+- name: Codeql.Enabled
+  value: ${{ parameters.EnableCodeQL }}
+- name: Codeql.TSAEnabled
+  value: ${{ parameters.EnableCodeQLTSA }}
+- name: Codeql.TSAOptionsPath
+  value: ${{ parameters.CodeQLTSASettings }}

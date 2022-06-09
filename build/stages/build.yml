@@ -1,5 +1,10 @@
 # Build Stage
 
+parameters:
+- name: EnableCodeSign
+  type: boolean
+  default: true
+
 stages:
 - stage: Build
   jobs:
@@ -26,30 +31,33 @@ stages:
       inputs:
         forceReinstallCredentialProvider: true
 
-    - powershell: |
-          $branch = '$(Build.SourceBranch)'
-          $codeSignOverride = if ($env:FORCECODESIGN) { $env:FORCECODESIGN } else { '' }
+    - ${{ if eq(parameters.EnableCodeSign, true) }}:
+      - powershell: |
+            $branch = '$(Build.SourceBranch)'
+            $codeSignOverride = if ($env:FORCECODESIGN) { $env:FORCECODESIGN } else { '' }
         
-          if($branch -eq '$(MainBranch)' -or $codeSignOverride -eq 'true') {
-            $codeSignOverride = 'true'
-          }
+            if($branch -eq '$(MainBranch)' -or $codeSignOverride -eq 'true') {
+              $codeSignOverride = 'true'
+            }
 
-          Write-Host "Code Sign Override: $codeSignOverride"
-          Write-Host "##vso[task.setvariable variable=Xamarin.CodeSignOverride]$codeSignOverride"
-      name: 'SetCodeSignOnMain'
-      displayName: 'Evaluate CodeSign for Main Branch'
+            Write-Host "Code Sign Override: $codeSignOverride"
+            Write-Host "##vso[task.setvariable variable=Xamarin.CodeSignOverride]$codeSignOverride"
+        name: 'SetCodeSignOnMain'
+        displayName: 'Evaluate CodeSign for Main Branch'
 
-    - template: jenkins-codesign/signType.v1.yml@templates
-      parameters:
-        CodeSignOverride: "$(Xamarin.CodeSignOverride)"
+    - ${{ if eq(parameters.EnableCodeSign, true) }}:
+      - template: jenkins-codesign/signType.v1.yml@templates
+        parameters:
+          CodeSignOverride: "$(Xamarin.CodeSignOverride)"
 
-    - task: MicroBuildSigningPlugin@3
-      displayName: "Prepare Signing Tools (MicroBuild)"
-      inputs:
-        signType: '$(Xamarin.SignType)'
-        feedSource: 'https://devdiv.pkgs.visualstudio.com/DefaultCollection/_packaging/MicroBuildToolset/nuget/v3/index.json'
-      env:
-        TeamName: $(TeamName)
+    - ${{ if eq(parameters.EnableCodeSign, true) }}:
+      - task: MicroBuildSigningPlugin@3
+        displayName: "Prepare Signing Tools (MicroBuild)"
+        inputs:
+          signType: '$(Xamarin.SignType)'
+          feedSource: 'https://devdiv.pkgs.visualstudio.com/DefaultCollection/_packaging/MicroBuildToolset/nuget/v3/index.json'
+        env:
+          TeamName: $(TeamName)
 
     # Disabled due to unreliability in loading the service index for source https://devdiv.pkgs.visualstudio.com/_packaging/xamarin-xvs/nuget/v3/index.json. [C:\Users\VssAdministrator\AppData\Local\Temp\nabauqrz.xry\restore.csproj]
     - powershell: |
@@ -67,7 +75,7 @@ stages:
       inputs:
         solution: src\Merq.sln
         configuration: $(Configuration)
-        msbuildArguments: '-r -v:normal -p:Configuration=$(Configuration) -p:_SignFiles=True -bl:$(Build.ArtifactStagingDirectory)/logs/build.binlog'   # Note: Setting configuration on the task does not appear to be sufficient. Also set as a build property
+        msbuildArguments: '-r -v:normal -p:Configuration=$(Configuration) -p:_SignFiles=${{ parameters.EnableCodeSign }} -bl:$(Build.ArtifactStagingDirectory)/logs/build.binlog'   # Note: Setting configuration on the task does not appear to be sufficient. Also set as a build property
 
     - powershell: |
         $filename = "$(Build.SourcesDirectory)\src\Vsix\Merq.Vsix\obj\$(Configuration)\extension.vsixmanifest"
@@ -113,13 +121,14 @@ stages:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)/package'
         ArtifactName: package
 
-    - task: MicroBuildCodesignVerify@3
-      displayName: 'Verify Signed Files'
-      inputs:
-        TargetFolders: |
-          $(Build.ArtifactStagingDirectory)/package
-        ExcludeSNVerify: true
-        ApprovalListPathForCerts: '$(Build.SourcesDirectory)/build/signexclusionlist.csv'
+    - ${{ if eq(parameters.EnableCodeSign, true) }}:
+      - task: MicroBuildCodesignVerify@3
+        displayName: 'Verify Signed Files'
+        inputs:
+          TargetFolders: |
+            $(Build.ArtifactStagingDirectory)/package
+          ExcludeSNVerify: true
+          ApprovalListPathForCerts: '$(Build.SourcesDirectory)/build/signexclusionlist.csv'
 
     - task: PublishBuildArtifacts@1
       displayName: 'Symbols'
@@ -139,7 +148,7 @@ stages:
             $complianceEnabled = 'true'
           } else {
             $complianceEnabled = 'false'
-          }
+          }  
         }
 
         Write-Host "Source Branch: $branch, Is Release Branch: $isRelease, Build Reason: $reason"
