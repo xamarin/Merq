@@ -2,6 +2,9 @@
 
 stages:
 - stage: Upload
+  dependsOn:
+  - Build
+  - Compliance
   jobs:
   - job: Upload
     pool:

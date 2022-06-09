@@ -26,4 +26,5 @@ resources:
 stages:
 - template: build/stages/build.yml
 - template: build/stages/upload.yml
+- template: build/stages/compliance.yml
 - template: build/stages/sbom.yml
