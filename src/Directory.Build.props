@@ -18,6 +18,8 @@
 		<GeneratePackageOnBuild>$(CI)</GeneratePackageOnBuild>
 		<PackageOnBuild>$(CI)</PackageOnBuild>
 		<CheckForOverflowUnderflow Condition=" '$(Configuration)' == 'Debug' ">true</CheckForOverflowUnderflow>
+
+		<LangVersion>Latest</LangVersion>
 	</PropertyGroup>
 
 	<ItemGroup>

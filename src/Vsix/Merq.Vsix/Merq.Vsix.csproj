@@ -10,8 +10,8 @@
 
     <DeployExtension>true</DeployExtension>
     <DeployExtension Condition="$(CI)">false</DeployExtension>
-    <OverrideDeployVsixExtensionFiles>false</OverrideDeployVsixExtensionFiles>
-    <OverrideGeneratePkgDef>false</OverrideGeneratePkgDef>
+    <!-- Allows properly importing VSSDK without using a legacy csproj -->
+    <CustomAfterMicrosoftCSharpTargets Condition="'$(VsSDKInstall)' != ''">$(VsSDKInstall)\Microsoft.VsSDK.targets</CustomAfterMicrosoftCSharpTargets>
   </PropertyGroup>
 
   <Import Project="Merq.Vsix.props" />
@@ -56,25 +56,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Core\Merq.Core\Merq.Core.csproj">
-      <Name>Merq.Core</Name>
-      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup;DebugSymbolsProjectOutputGroup;GetCopyToOutputDirectoryItems;SatelliteDllsProjectOutputGroup;BuiltProjectOutputGroupDependencies;DebugSymbolsProjectOutputGroupDependencies;SatelliteDllsProjectOutputGroupDependencies</IncludeOutputGroupsInVSIX>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\Merq\Merq.csproj">
-      <Name>Merq</Name>
-      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup;DebugSymbolsProjectOutputGroup;GetCopyToOutputDirectoryItems;SatelliteDllsProjectOutputGroup;BuiltProjectOutputGroupDependencies;DebugSymbolsProjectOutputGroupDependencies;SatelliteDllsProjectOutputGroupDependencies</IncludeOutputGroupsInVSIX>
-    </ProjectReference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.VisualStudioEng.MicroBuild.Core" Version="1.0.0">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="MSBuilder.ThisAssembly.Project" Version="0.3.4" PrivateAssets="all" />
+    <PackageReference Include="Merq.Core" Version="1.2.0-beta" />
+    <PackageReference Include="Microsoft.VisualStudioEng.MicroBuild.Core" Version="1.0.0" PrivateAssets="all" />
+    <PackageReference Include="ThisAssembly.Project" Version="1.0.9" PrivateAssets="all" />
     <PackageReference Include="Clarius.VisualStudio" Version="2.0.14" />
-    <PackageReference Include="Xamarin.VSSDK" Version="0.4.0-alpha.24" />
-    <PackageReference Include="Xamarin.VSSDK.BuildTools" Version="0.4.0-alpha.24" />
     <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.5.3055-preview3-ga4af8ebd28" />
     <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.5.0-preview-3-33209-250" />
     <PackageReference Include="Microsoft.VisualStudio.SDK.EmbedInteropTypes" Version="15.0.36" ExcludeAssets="all" />
@@ -114,10 +99,7 @@
     <ItemGroup>
       <NupkgFiles Include="$(PackageOutputPath)\Merq.*.nupkg" />
     </ItemGroup>
-    <Copy
-      SourceFiles="@(NupkgFiles)"
-      DestinationFolder="$(OutDir)"
-    />
+    <Copy SourceFiles="@(NupkgFiles)" DestinationFolder="$(OutDir)" />
   </Target>
 
   <Target Name="SignVsix" BeforeTargets="SignFiles" DependsOnTargets="GetFilesToSign;CreateVsixContainer;CopyNuGetFilesToOutputDir" Condition="'$(Configuration)' == 'Release'">
@@ -136,10 +118,7 @@
       <SignedFiles Include="$(OutDir)*.nupkg" />
       <SignedFiles Include="$(OutDir)$(TargetVsixContainerName)" />
     </ItemGroup>
-    <Copy
-      SourceFiles="@(SignedFiles)"
-      DestinationFolder="$(PackageOutputPath)"
-    />
+    <Copy SourceFiles="@(SignedFiles)" DestinationFolder="$(PackageOutputPath)" />
   </Target>
 
   <ItemGroup>

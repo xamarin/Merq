@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MSBuilder.ThisAssembly.Project" Version="0.3.4" PrivateAssets="all" />
+    <PackageReference Include="ThisAssembly.Project" Version="1.0.9" PrivateAssets="all" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5" />
     <PackageReference Include="xunit.runner.msbuild" Version="2.4.1" />
@@ -18,16 +18,13 @@
     <PackageReference Include="VSSDK.ComponentModelHost.11" Version="11.0.4" />
     <PackageReference Include="EnvDTE" Version="8.0.2" />
     <PackageReference Include="System.Reactive" Version="3.0.0" />
+    <PackageReference Include="Merq" Version="1.2.0-beta" />
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="Microsoft.ComponentModel.Composition.Diagnostics">
       <HintPath>..\..\..\lib\Microsoft.ComponentModel.Composition.Diagnostics.dll</HintPath>
     </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\Core\Merq.Core\Merq.Core.csproj" />
   </ItemGroup>
 
   <Target Name="RemoveResolvedLockFileAnalyzers" AfterTargets="ResolveLockFileAnalyzers">
