@@ -117,7 +117,7 @@
   </Target>
 
   <Target Name="_CleanBindingRedirectsPackage"
-          Inputs="@(ReferencePath);$(MSBuildThisFileFullPath);$(MSBuildProjectFullPath)"
+          Inputs="$(ProjectAssetsFile);@(ReferencePath);$(MSBuildThisFileFullPath);$(MSBuildProjectFullPath)"
           Outputs="$(IntermediateOutputPath)$(_BindingRedirects)">
 
     <!-- If we're in this target, it's because the file is out of date, or it doesn't exist -->
