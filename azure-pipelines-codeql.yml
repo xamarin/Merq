@@ -15,6 +15,9 @@ schedules:
     include:
     - main
 
+pr: none
+trigger: none
+
 variables:
 - template: build/variables.yml
   parameters:
