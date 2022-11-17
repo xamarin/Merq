@@ -10,11 +10,9 @@
         "REDMOND\\maagno",
         "REDMOND\\emafern"
     ],
-    "instanceUrl": "DEVDIV",
+    "instanceUrl": "https://devdiv.visualstudio.com/",
     "projectName": "DevDiv",
     "areaPath": "DevDiv\\VS Client - Tools\\Platform\\Xamarin VS",
     "iterationPath": "DevDiv",
-    "tools": [
-        "CodeQL"
-    ]
+    "allTools": true
 }
