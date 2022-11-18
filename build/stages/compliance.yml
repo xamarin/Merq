@@ -51,7 +51,7 @@ stages:
     - task: CodeInspector@2
       displayName: Run Code Inspector Analysis
       inputs:
-      ProductId: '$(System.TeamProjectId)'
+        ProductId: '$(System.TeamProjectId)'
 
     - task: SdtReport@2
       displayName: Create Security Analysis Report
