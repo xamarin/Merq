@@ -75,8 +75,8 @@
     <PackageReference Include="Clarius.VisualStudio" Version="2.0.14" />
     <PackageReference Include="Xamarin.VSSDK" Version="0.4.0-alpha.24" />
     <PackageReference Include="Xamarin.VSSDK.BuildTools" Version="0.4.0-alpha.24" />
-    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.1.4054" />
-    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.1.32210.191" />
+    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.5.3055-preview3-ga4af8ebd28" />
+    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.5.0-preview-3-33209-250" />
     <PackageReference Include="Microsoft.VisualStudio.SDK.EmbedInteropTypes" Version="15.0.36" ExcludeAssets="all" />
   </ItemGroup>
 
