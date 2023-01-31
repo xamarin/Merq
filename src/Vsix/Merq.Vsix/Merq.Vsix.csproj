@@ -97,10 +97,10 @@
   <Target Name="GetFilesToSign" BeforeTargets="SignVsixContentFiles" DependsOnTargets="IncludeNuGetResolvedAssets" Condition="'$(Configuration)' == 'Release'">
     <ItemGroup>
       <FilesToSign Include="$(IntermediateOutputPath)Merq.Vsix.dll">
-        <Authenticode>Microsoft400</Authenticode>
+        <Authenticode>3PartySHA2</Authenticode>
       </FilesToSign>
       <FilesToSign Include="@(MerqFile->'$(OutDir)%(Filename)%(Extension)')">
-        <Authenticode>Microsoft400</Authenticode>
+        <Authenticode>3PartySHA2</Authenticode>
       </FilesToSign>
     </ItemGroup>
   </Target>
