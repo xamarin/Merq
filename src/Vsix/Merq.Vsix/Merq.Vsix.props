@@ -5,7 +5,6 @@
 	<PropertyGroup>
 		<VerifyTargetVersion>false</VerifyTargetVersion>
 		<BypassVsixValidation Condition="'$(CI)' == 'true'">true</BypassVsixValidation>
-		<CreateVsixContainer>$(CI)</CreateVsixContainer>
 
 		<UseCodebase>true</UseCodebase>
 		<IncludeDebugSymbolsInVSIXContainer>true</IncludeDebugSymbolsInVSIXContainer>

@@ -4,10 +4,6 @@
 		<Version Condition="'$(Version)' == '1.0.0.0'"></Version>
 	</PropertyGroup>
 
-	<ItemGroup Condition="'$(IncludeGlobalAssemblyInfo)' != 'false'">
-		<Compile Include="$(MSBuildThisFileDirectory)GlobalAssemblyInfo.cs" />
-	</ItemGroup>
-
 	<Import Project="Version.targets" />
 
 	<Target Name="Test" DependsOnTargets="Build;GetTargetPath">

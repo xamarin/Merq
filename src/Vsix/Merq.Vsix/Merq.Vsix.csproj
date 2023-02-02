@@ -5,13 +5,17 @@
     <TargetFramework>net472</TargetFramework>
     <RootNamespace>Merq</RootNamespace>
     <TargetVsixContainerName>Merq.vsix</TargetVsixContainerName>
-    <CreateVsixContainer>true</CreateVsixContainer>
     <IncludeGlobalAssemblyInfo>false</IncludeGlobalAssemblyInfo>
 
+    <CreateVsixContainer>true</CreateVsixContainer>
     <DeployExtension>true</DeployExtension>
-    <DeployExtension Condition="$(CI)">false</DeployExtension>
-    <OverrideDeployVsixExtensionFiles>false</OverrideDeployVsixExtensionFiles>
-    <OverrideGeneratePkgDef>false</OverrideGeneratePkgDef>
+
+    <!-- Allows properly importing VSSDK without using a legacy csproj -->
+    <CustomAfterMicrosoftCSharpTargets Condition="'$(VsSDKInstall)' != ''">$(VsSDKInstall)\Microsoft.VsSDK.targets</CustomAfterMicrosoftCSharpTargets>
+
+    <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
+    <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
+    <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
   </PropertyGroup>
 
   <Import Project="Merq.Vsix.props" />
@@ -56,33 +60,21 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Core\Merq.Core\Merq.Core.csproj">
-      <Name>Merq.Core</Name>
-      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup;DebugSymbolsProjectOutputGroup;GetCopyToOutputDirectoryItems;SatelliteDllsProjectOutputGroup;BuiltProjectOutputGroupDependencies;DebugSymbolsProjectOutputGroupDependencies;SatelliteDllsProjectOutputGroupDependencies</IncludeOutputGroupsInVSIX>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\Merq\Merq.csproj">
-      <Name>Merq</Name>
-      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup;DebugSymbolsProjectOutputGroup;GetCopyToOutputDirectoryItems;SatelliteDllsProjectOutputGroup;BuiltProjectOutputGroupDependencies;DebugSymbolsProjectOutputGroupDependencies;SatelliteDllsProjectOutputGroupDependencies</IncludeOutputGroupsInVSIX>
-    </ProjectReference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.VisualStudioEng.MicroBuild.Core" Version="1.0.0">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="MSBuilder.ThisAssembly.Project" Version="0.3.4" PrivateAssets="all" />
+    <PackageReference Include="Merq" Version="1.3.0" PrivateAssets="all" IncludeInVSIX="true" />
+    <PackageReference Include="Merq.Core" Version="1.3.0" PrivateAssets="all" IncludeInVSIX="true" />
+    <PackageReference Include="Merq.VisualStudio" Version="1.3.0" PrivateAssets="all" IncludeInVSIX="true" />
+    <PackageReference Include="Microsoft.VisualStudioEng.MicroBuild.Core" Version="1.0.0" PrivateAssets="all" />
+    <PackageReference Include="ThisAssembly.Project" Version="1.0.9" PrivateAssets="all" />
     <PackageReference Include="Clarius.VisualStudio" Version="2.0.14" />
-    <PackageReference Include="Xamarin.VSSDK" Version="0.4.0-alpha.24" />
-    <PackageReference Include="Xamarin.VSSDK.BuildTools" Version="0.4.0-alpha.24" />
-    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.5.3055-preview3-ga4af8ebd28" />
-    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.5.0-preview-3-33209-250" />
+    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.2.2190" />
+    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.2.32505.173" />
     <PackageReference Include="Microsoft.VisualStudio.SDK.EmbedInteropTypes" Version="15.0.36" ExcludeAssets="all" />
   </ItemGroup>
 
   <ItemGroup>
     <BindingRedirect Include="Merq" />
     <BindingRedirect Include="Merq.Core" />
+    <BindingRedirect Include="Merq.VisualStudio" />
   </ItemGroup>
 
   <!--
@@ -102,46 +94,45 @@
     </ItemGroup>
   </Target>
 
-  <Target Name="GetFilesToSign" BeforeTargets="SignVsixContentFiles" Condition="'$(Configuration)' == 'Release'">
+  <Target Name="GetFilesToSign" BeforeTargets="SignVsixContentFiles" DependsOnTargets="IncludeNuGetResolvedAssets" Condition="'$(Configuration)' == 'Release'">
     <ItemGroup>
       <FilesToSign Include="$(IntermediateOutputPath)Merq.Vsix.dll">
-        <Authenticode>Microsoft400</Authenticode>
+        <Authenticode>3PartySHA2</Authenticode>
+      </FilesToSign>
+      <FilesToSign Include="@(MerqFile->'$(OutDir)%(Filename)%(Extension)')">
+        <Authenticode>3PartySHA2</Authenticode>
       </FilesToSign>
     </ItemGroup>
   </Target>
 
-  <Target Name="CopyNuGetFilesToOutputDir" BeforeTargets="SignVsix" AfterTargets="CreateVsixContainer" Condition="'$(Configuration)' == 'Release'">
-    <ItemGroup>
-      <NupkgFiles Include="$(PackageOutputPath)\Merq.*.nupkg" />
-    </ItemGroup>
-    <Copy
-      SourceFiles="@(NupkgFiles)"
-      DestinationFolder="$(OutDir)"
-    />
-  </Target>
-
-  <Target Name="SignVsix" BeforeTargets="SignFiles" DependsOnTargets="GetFilesToSign;CreateVsixContainer;CopyNuGetFilesToOutputDir" Condition="'$(Configuration)' == 'Release'">
+  <Target Name="SignVsix" BeforeTargets="SignFiles" DependsOnTargets="GetFilesToSign;CopyFilesToOutputDirectory;CreateVsixContainer" Condition="'$(Configuration)' == 'Release'">
     <ItemGroup>
       <FilesToSign Include="$(OutDir)$(TargetVsixContainerName)">
         <Authenticode>VsixSHA2</Authenticode>
-      </FilesToSign>
-      <FilesToSign Include="$(OutDir)Merq.*.nupkg">
-        <Authenticode>NuGet</Authenticode>
       </FilesToSign>
     </ItemGroup>
   </Target>
 
   <Target Name="CopySignedNuGetFilesToPackageDir" AfterTargets="SignFiles" Condition="'$(Configuration)' == 'Release'">
     <ItemGroup>
-      <SignedFiles Include="$(OutDir)*.nupkg" />
+      <SignedFiles Include="$(OutDir)Merq*.dll" />
       <SignedFiles Include="$(OutDir)$(TargetVsixContainerName)" />
     </ItemGroup>
-    <Copy
-      SourceFiles="@(SignedFiles)"
-      DestinationFolder="$(PackageOutputPath)"
-    />
+    <Copy SourceFiles="@(SignedFiles)" DestinationFolder="$(PackageOutputPath)" />
   </Target>
 
+  <Target Name="IncludeNuGetResolvedAssets" DependsOnTargets="ResolvePackageAssets" BeforeTargets="GetVsixSourceItems;GetFilesToSign" Returns="@(MerqFile)">
+    <ItemGroup>
+      <MerqPackageFile Include="@(RuntimeCopyLocalItems->WithMetadataValue('NuGetPackageId','Merq'))" />
+      <MerqPackageFile Include="@(RuntimeCopyLocalItems->WithMetadataValue('NuGetPackageId','Merq.Core'))" />
+      <MerqPackageFile Include="@(RuntimeCopyLocalItems->WithMetadataValue('NuGetPackageId','Merq.VisualStudio'))" />
+      <MerqFile Include="@(MerqPackageFile->WithMetadataValue('Filename','Merq'))" />
+      <MerqFile Include="@(MerqPackageFile->WithMetadataValue('Filename','Merq.Core'))" />
+      <MerqFile Include="@(MerqPackageFile->WithMetadataValue('Filename','Merq.VisualStudio'))" />
+      <VSIXCopyLocalReferenceSourceItem Include="@(MerqFile)" />
+    </ItemGroup>
+  </Target>
+  
   <ItemGroup>
     <EmbeddedResource Update="MerqPackage.resx">
       <MergeWithCTO>true</MergeWithCTO>
@@ -157,6 +148,7 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <Import Project="Xamarin.VSSDK.BuildTools.GenerateBindingRedirects.targets" />
   <Import Project="Merq.Vsix.targets" />
 
   <PropertyGroup>
