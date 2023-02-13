@@ -7,5 +7,5 @@ stages:
     parameters:
       packageName: 'Mobile Essentials'
       artifactNames: ['package']
-      packageFilter: '*.vsix;*.nupkg'
+      packageFilter: '*.vsix'
       packageVersionRegex: '(?i)^Merq\.(?<version>\d+\.\d+\.\d+).vsix$'
