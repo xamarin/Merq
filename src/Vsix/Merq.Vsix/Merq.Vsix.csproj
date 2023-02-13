@@ -60,9 +60,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Merq" Version="1.3.0" PrivateAssets="all" IncludeInVSIX="true" />
-    <PackageReference Include="Merq.Core" Version="1.3.0" PrivateAssets="all" IncludeInVSIX="true" />
-    <PackageReference Include="Merq.VisualStudio" Version="1.3.0" PrivateAssets="all" IncludeInVSIX="true" />
+    <PackageReference Include="Merq" Version="1.3.0" PrivateAssets="all" IncludeInVSIX="true" GeneratePathProperty="true" />
+    <PackageReference Include="Merq.Core" Version="1.3.0" PrivateAssets="all" IncludeInVSIX="true" GeneratePathProperty="true" />
+    <PackageReference Include="Merq.VisualStudio" Version="1.3.0" PrivateAssets="all" IncludeInVSIX="true" GeneratePathProperty="true" />
     <PackageReference Include="Microsoft.VisualStudioEng.MicroBuild.Core" Version="1.0.0" PrivateAssets="all" />
     <PackageReference Include="ThisAssembly.Project" Version="1.0.9" PrivateAssets="all" />
     <PackageReference Include="Clarius.VisualStudio" Version="2.0.14" />
@@ -75,6 +75,18 @@
     <BindingRedirect Include="Merq" />
     <BindingRedirect Include="Merq.Core" />
     <BindingRedirect Include="Merq.VisualStudio" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Configuration)' == 'Release'">
+    <NuGetFilesToSign Include="$(PkgMerq)\lib\netstandard2.0\Merq.dll">
+      <Authenticode>3PartySHA2</Authenticode>
+    </NuGetFilesToSign>
+    <NuGetFilesToSign Include="$(PkgMerq_Core)\lib\netstandard2.0\Merq.Core.dll" >
+      <Authenticode>3PartySHA2</Authenticode>
+    </NuGetFilesToSign>
+    <NuGetFilesToSign Include="$(PkgMerq_VisualStudio)\lib\net472\Merq.VisualStudio.dll" >
+      <Authenticode>3PartySHA2</Authenticode>
+    </NuGetFilesToSign>
   </ItemGroup>
 
   <!--
@@ -98,9 +110,6 @@
     <ItemGroup>
       <FilesToSign Include="$(IntermediateOutputPath)Merq.Vsix.dll">
         <Authenticode>Microsoft400</Authenticode>
-      </FilesToSign>
-      <FilesToSign Include="@(MerqFile->'$(OutDir)%(Filename)%(Extension)')">
-        <Authenticode>3PartySHA2</Authenticode>
       </FilesToSign>
     </ItemGroup>
   </Target>
