@@ -97,7 +97,7 @@
   <Target Name="GetFilesToSign" BeforeTargets="SignVsixContentFiles" DependsOnTargets="IncludeNuGetResolvedAssets" Condition="'$(Configuration)' == 'Release'">
     <ItemGroup>
       <FilesToSign Include="$(IntermediateOutputPath)Merq.Vsix.dll">
-        <Authenticode>3PartySHA2</Authenticode>
+        <Authenticode>Microsoft400</Authenticode>
       </FilesToSign>
       <FilesToSign Include="@(MerqFile->'$(OutDir)%(Filename)%(Extension)')">
         <Authenticode>3PartySHA2</Authenticode>
@@ -113,9 +113,8 @@
     </ItemGroup>
   </Target>
 
-  <Target Name="CopySignedNuGetFilesToPackageDir" AfterTargets="SignFiles" Condition="'$(Configuration)' == 'Release'">
+  <Target Name="CopySignedVsixToPackageDir" AfterTargets="SignFiles" Condition="'$(Configuration)' == 'Release'">
     <ItemGroup>
-      <SignedFiles Include="$(OutDir)Merq*.dll" />
       <SignedFiles Include="$(OutDir)$(TargetVsixContainerName)" />
     </ItemGroup>
     <Copy SourceFiles="@(SignedFiles)" DestinationFolder="$(PackageOutputPath)" />
