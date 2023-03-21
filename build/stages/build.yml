@@ -75,7 +75,7 @@ stages:
       inputs:
         solution: src\Merq.sln
         configuration: $(Configuration)
-        msbuildArguments: '-r -v:normal -p:Configuration=$(Configuration) -p:_SignFiles=${{ parameters.EnableCodeSign }} -bl:$(Build.ArtifactStagingDirectory)/logs/build.binlog'   # Note: Setting configuration on the task does not appear to be sufficient. Also set as a build property
+        msbuildArguments: '-r -v:normal -p:ArtifactsPath=$(Build.ArtifactStagingDirectory)\artifacts -p:Configuration=$(Configuration) -p:_SignFiles=${{ parameters.EnableCodeSign }} -bl:$(Build.ArtifactStagingDirectory)/logs/build.binlog'   # Note: Setting configuration on the task does not appear to be sufficient. Also set as a build property
 
     - powershell: |
         $filename = "$(Build.SourcesDirectory)\src\Vsix\Merq.Vsix\obj\$(Configuration)\extension.vsixmanifest"
