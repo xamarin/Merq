@@ -48,11 +48,6 @@ stages:
         exclusionFile: $(System.DefaultWorkingDirectory)\build\PoliCheckExclusions.xml
         pE: '1|2|3|4'
 
-    - task: CodeInspector@2
-      displayName: Run Code Inspector Analysis
-      inputs:
-        ProductId: '$(System.TeamProjectId)'
-
     - task: SdtReport@2
       displayName: Create Security Analysis Report
       inputs:
