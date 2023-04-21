@@ -9,6 +9,7 @@
 
     <CreateVsixContainer>true</CreateVsixContainer>
     <DeployExtension Condition="'$(DeployExtension)' != ''">true</DeployExtension>
+    <IncludeCopyLocalReferencesInVSIXContainer>false</IncludeCopyLocalReferencesInVSIXContainer>
 
     <!-- Allows properly importing VSSDK without using a legacy csproj -->
     <CustomAfterMicrosoftCSharpTargets Condition="'$(VsSDKInstall)' != ''">$(VsSDKInstall)\Microsoft.VsSDK.targets</CustomAfterMicrosoftCSharpTargets>
