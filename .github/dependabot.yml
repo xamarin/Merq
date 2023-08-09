@@ -28,6 +28,10 @@ updates:
       # https://devdiv.visualstudio.com/DefaultCollection/DevDiv/_workitems/edit/1776264
       - dependency-name: "Microsoft.Build.Artifacts"
         versions: [">=4.2.0"]
+    groups:
+       nugets:
+          patterns:
+            - "*"
 
   - package-ecosystem: gitsubmodule
     directory: "/"
@@ -38,3 +42,7 @@ updates:
     open-pull-requests-limit: 10
     assignees:
     - xamarin/vscx-tools-platform
+    groups:
+       submodules:
+          patterns:
+            - "*"
