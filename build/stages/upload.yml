@@ -6,10 +6,6 @@ stages:
   - Build
   jobs:
   - job: Upload
-    pool:
-      name: AzurePipelines-EO
-      demands:
-      - ImageOverride -equals AzurePipelinesWindows2022compliant
     templateContext:
       outputs:
       - output: nuget
