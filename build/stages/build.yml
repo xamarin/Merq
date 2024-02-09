@@ -51,7 +51,7 @@ stages:
         dotnet --list-sdks
       displayName: 'Show .NET versions'
 
-    - task: NuGetAuthenticate@0
+    - task: NuGetAuthenticate@1
       displayName: Authenticate NuGet feeds
       inputs:
         forceReinstallCredentialProvider: true

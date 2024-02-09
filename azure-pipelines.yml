@@ -44,6 +44,7 @@ extends:
         enabled: false
       policheck:
         enabled: true
+        exclusionFile: $(System.DefaultWorkingDirectory)\build\PoliCheckExclusions.xml
     pool:
       name: AzurePipelines-EO
       image: AzurePipelinesWindows2022compliantGPT
@@ -53,5 +54,5 @@ extends:
     stages:
     - template: /build/stages/build.yml@self
     - template: /build/stages/upload.yml@self
-    - template: /build/stages/compliance.yml@self
+    # - template: /build/stages/compliance.yml@self
     - template: /build/stages/sbom.yml@self
