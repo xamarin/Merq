@@ -9,3 +9,4 @@ stages:
       artifactNames: ['package']
       packageFilter: '*.vsix'
       packageVersionRegex: '(?i)^Merq\.(?<version>\d+\.\d+\.\d+).vsix$'
+      use1ESTemplate: true

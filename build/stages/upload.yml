@@ -11,7 +11,15 @@ stages:
       name: AzurePipelines-EO
       demands:
       - ImageOverride -equals AzurePipelinesWindows2022compliant
-
+    templateContext:
+      outputs:
+      - output: nuget
+        displayName: 'Push Packages'
+        condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), eq(variables['PushPackages'], 'true')))
+        packageParentPath: '$(Build.ArtifactStagingDirectory)'
+        packagesToPush: $(Build.ArtifactStagingDirectory)/package/*.nupkg
+        nuGetFeedType: external
+        publishFeedCredentials: 'xamarin-impl public feed'
     steps:
     - checkout: self
 
@@ -26,20 +34,10 @@ stages:
     - task: DownloadBuildArtifacts@0
       inputs:
         artifactName: package
+        targetPath: $(Build.ArtifactStagingDirectory)
 
-    - template: dump-environment.yml@templates
     - template: upload-to-storage/win/v1.yml@templates
       parameters:
         ArtifactsDirectory: '$(Build.ArtifactStagingDirectory)/package'
         Azure.ContainerName: 'xvs-merq'
         GitHub.Context: 'artifacts'
-
-    - task: NuGetCommand@2
-      displayName: Push Packages
-      continueOnError: true
-      condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), eq(variables['PushPackages'], 'true')))
-      inputs:
-        command: push
-        packagesToPush: $(Build.ArtifactStagingDirectory)/package/*.nupkg
-        nuGetFeedType: external
-        publishFeedCredentials: 'xamarin-impl public feed'

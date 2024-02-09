@@ -15,6 +15,27 @@ stages:
   - job: Windows
     pool:
       name: $(WindowsPoolName)
+    templateContext:
+      mb:
+        - signing:
+            enabled: true
+            feedSource: 'https://devdiv.pkgs.visualstudio.com/DefaultCollection/_packaging/MicroBuildToolset/nuget/v3/index.json'
+            signType: 'Test' #TODO: Fix
+      outputParentDirectory: $(Build.ArtifactStagingDirectory)
+      outputs:
+      - output: pipelineArtifact
+        displayName: 'Logs'
+        condition: always()
+        targetPath: '$(Build.ArtifactStagingDirectory)/logs'
+        artifactName: logs
+      - output: pipelineArtifact
+        displayName: 'Artifacts'
+        targetPath: '$(Build.ArtifactStagingDirectory)/package'
+        artifactName: package
+      - output: pipelineArtifact
+        displayName: 'Symbols'
+        targetPath: '$(Build.ArtifactStagingDirectory)/artifacts'
+        artifactName: symbols
     steps:
     - checkout: self
       clean: true
@@ -35,44 +56,30 @@ stages:
       inputs:
         forceReinstallCredentialProvider: true
 
-    - ${{ if eq(parameters.EnableCodeSign, true) }}:
-      - powershell: |
-            $branch = '$(Build.SourceBranch)'
-            $codeSignOverride = if ($env:FORCECODESIGN) { $env:FORCECODESIGN } else { '' }
-        
-            if($branch -eq '$(MainBranch)' -or $codeSignOverride -eq 'true') {
-              $codeSignOverride = 'true'
-            }
+    # - ${{ if eq(parameters.EnableCodeSign, true) }}:
+    #   - powershell: |
+    #       $branch = '$(Build.SourceBranch)'
+    #       $codeSignOverride = if ($env:FORCECODESIGN) { $env:FORCECODESIGN } else { '' }
+    #       if($branch -eq '$(MainBranch)' -or $codeSignOverride -eq 'true') {
+    #         $codeSignOverride = 'true'
+    #       }
+    #       Write-Host "Code Sign Override: $codeSignOverride"
+    #       Write-Host "##vso[task.setvariable variable=Xamarin.CodeSignOverride]$codeSignOverride"
+    #     name: 'SetCodeSignOnMain'
+    #     displayName: 'Evaluate CodeSign for Main Branch'
 
-            Write-Host "Code Sign Override: $codeSignOverride"
-            Write-Host "##vso[task.setvariable variable=Xamarin.CodeSignOverride]$codeSignOverride"
-        name: 'SetCodeSignOnMain'
-        displayName: 'Evaluate CodeSign for Main Branch'
-
-    - ${{ if eq(parameters.EnableCodeSign, true) }}:
-      - template: jenkins-codesign/signType.v1.yml@templates
-        parameters:
-          CodeSignOverride: "$(Xamarin.CodeSignOverride)"
-
-    - ${{ if eq(parameters.EnableCodeSign, true) }}:
-      - task: MicroBuildSigningPlugin@3
-        displayName: "Prepare Signing Tools (MicroBuild)"
-        inputs:
-          signType: '$(Xamarin.SignType)'
-          feedSource: 'https://devdiv.pkgs.visualstudio.com/DefaultCollection/_packaging/MicroBuildToolset/nuget/v3/index.json'
-        env:
-          TeamName: $(TeamName)
-
-    # Disabled due to unreliability in loading the service index for source https://devdiv.pkgs.visualstudio.com/_packaging/xamarin-xvs/nuget/v3/index.json. [C:\Users\VssAdministrator\AppData\Local\Temp\nabauqrz.xry\restore.csproj]
-    - powershell: |
-        # https://stackoverflow.com/questions/58764322/cannot-install-dotnet-ef-tool-on-windows-10
-        # https://devdiv.visualstudio.com/DevDiv/_artifacts/feed/xamarin-xvs/NuGet/dotnet-format/6.0.226302/versions
-        dotnet tool update -g dotnet-format --version 6.0.226302
-        dotnet format -f $(Build.SourcesDirectory)\src --check -v:diag
-      displayName: Check .editorconfig compliance
-      enabled: false
-
-    - template: dump-environment.yml@templates
+    # - ${{ if eq(parameters.EnableCodeSign, true) }}:
+    #   - template: jenkins-codesign/signType.v1.yml@templates
+    #     parameters:
+    #       CodeSignOverride: "$(Xamarin.CodeSignOverride)"
+    # - ${{ if eq(parameters.EnableCodeSign, true) }}: []
+    # - powershell: |
+    #     # https://stackoverflow.com/questions/58764322/cannot-install-dotnet-ef-tool-on-windows-10
+    #     # https://devdiv.visualstudio.com/DevDiv/_artifacts/feed/xamarin-xvs/NuGet/dotnet-format/6.0.226302/versions
+    #     dotnet tool update -g dotnet-format --version 6.0.226302
+    #     dotnet format -f $(Build.SourcesDirectory)\src --check -v:diag
+    #   displayName: Check .editorconfig compliance
+    #   enabled: false
 
     - task: MSBuild@1
       displayName: Build
@@ -112,19 +119,6 @@ stages:
         rerunFailedTests: true
         rerunMaxAttempts: 5
 
-    - task: PublishBuildArtifacts@1
-      displayName: 'Logs'
-      condition: always()
-      inputs:
-        PathtoPublish: '$(Build.ArtifactStagingDirectory)/logs'
-        ArtifactName: logs
-
-    - task: PublishBuildArtifacts@1
-      displayName: 'Artifacts'
-      inputs:
-        PathtoPublish: '$(Build.ArtifactStagingDirectory)/package'
-        ArtifactName: package
-
     - ${{ if eq(parameters.EnableCodeSign, true) }}:
       - task: MicroBuildCodesignVerify@3
         displayName: 'Verify Signed Files'
@@ -133,12 +127,6 @@ stages:
             $(Build.ArtifactStagingDirectory)/package
           ExcludeSNVerify: true
           ApprovalListPathForCerts: '$(Build.SourcesDirectory)/build/signexclusionlist.csv'
-
-    - task: PublishBuildArtifacts@1
-      displayName: 'Symbols'
-      inputs:
-        PathtoPublish: '$(Build.ArtifactStagingDirectory)/artifacts'
-        ArtifactName: symbols
 
     - task: ComponentGovernanceComponentDetection@0
       inputs:
