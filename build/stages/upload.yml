@@ -29,7 +29,7 @@ stages:
     - task: DownloadBuildArtifacts@0
       inputs:
         artifactName: package
-        targetPath: $(Build.ArtifactStagingDirectory)
+        targetPath: $(Build.ArtifactStagingDirectory)/package
 
     - template: upload-to-storage/win/v1.yml@templates
       parameters:
