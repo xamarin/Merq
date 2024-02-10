@@ -81,6 +81,15 @@ stages:
     #   displayName: Check .editorconfig compliance
     #   enabled: false
 
+    # Disabled due to unreliability in loading the service index for source https://devdiv.pkgs.visualstudio.com/_packaging/xamarin-xvs/nuget/v3/index.json. [C:\Users\VssAdministrator\AppData\Local\Temp\nabauqrz.xry\restore.csproj]
+    - powershell: |
+        # https://stackoverflow.com/questions/58764322/cannot-install-dotnet-ef-tool-on-windows-10
+        # https://devdiv.visualstudio.com/DevDiv/_artifacts/feed/xamarin-xvs/NuGet/dotnet-format/6.0.226302/versions
+        dotnet tool update -g dotnet-format --version 6.0.226302
+        dotnet format -f $(Build.SourcesDirectory)\src --check -v:diag
+      displayName: Check .editorconfig compliance
+      enabled: false
+
     - task: MSBuild@1
       displayName: Build
       inputs:
