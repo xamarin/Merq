@@ -25,7 +25,7 @@ stages:
         artifactName: logs
       - output: pipelineArtifact
         displayName: 'Artifacts'
-        targetPath: '$(Build.ArtifactStagingDirectory)/package'
+        targetPath: '$(Build.ArtifactStagingDirectory)/package' # vsix will only get published if "CopySignedVsixToPackageDir" target runs in Merq.Vsix.csproj
         artifactName: package
       - output: pipelineArtifact
         displayName: 'Symbols'
@@ -69,7 +69,7 @@ stages:
           CodeSignOverride: "$(Xamarin.CodeSignOverride)"
     
     - ${{ if eq(parameters.EnableCodeSign, true) }}:
-      - task: MicroBuildSigningPlugin@3
+      - task: MicroBuildSigningPlugin@4
         displayName: "Prepare Signing Tools (MicroBuild)"
         inputs:
           signType: '$(Xamarin.SignType)'
