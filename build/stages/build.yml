@@ -128,7 +128,7 @@ stages:
         rerunFailedTests: true
         rerunMaxAttempts: 5
 
-    - ${{ if eq(parameters.EnableCodeSign, true) }}:
+    - ${{ if eq(parameters.EnableCodeSign, true) }}: # TODO - Fix this once we have proper signing set up
       - task: MicroBuildCodesignVerify@3
         displayName: 'Verify Signed Files'
         inputs:

@@ -45,6 +45,9 @@ extends:
       policheck:
         enabled: true
         exclusionFile: $(System.DefaultWorkingDirectory)\build\PoliCheckExclusions.xml
+      tsa:
+        enabled: true
+        configFile: $(System.DefaultWorkingDirectory)\build\tsaoptions-v2.json
     pool:
       name: AzurePipelines-EO
       image: AzurePipelinesWindows2022compliantGPT
