@@ -39,9 +39,6 @@ resources:
 extends:
   template: azure-pipelines/MicroBuild.1ES.Official.yml@MicroBuildTemplate
   parameters:
-    sdl:
-      sbom:
-        enabled: false
       policheck:
         enabled: true
         exclusionFile: $(System.DefaultWorkingDirectory)\build\PoliCheckExclusions.xml
@@ -57,8 +54,8 @@ extends:
     stages:
     - template: /build/stages/build.yml@self
     - template: /build/stages/upload.yml@self
-    - template: /build/stages/sbom.yml@self
-      parameters:
-        sdl:
-          tsa:
-            enabled: false
+    # - template: /build/stages/sbom.yml@self
+    #   parameters:
+    #     sdl:
+    #       tsa:
+    #         enabled: false

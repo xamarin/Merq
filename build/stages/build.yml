@@ -23,6 +23,7 @@ stages:
         condition: always()
         targetPath: '$(Build.ArtifactStagingDirectory)/logs'
         artifactName: logs
+        sbomEnabled: false # SBOM only enabled for vsix
       - output: pipelineArtifact
         displayName: 'Artifacts'
         targetPath: '$(Build.ArtifactStagingDirectory)/package' # vsix will only get published if "CopySignedVsixToPackageDir" target runs in Merq.Vsix.csproj
@@ -31,6 +32,7 @@ stages:
         displayName: 'Symbols'
         targetPath: '$(Build.ArtifactStagingDirectory)/artifacts'
         artifactName: symbols
+        sbomEnabled: false # SBOM only enabled for vsix
     steps:
     - checkout: self
       clean: true
