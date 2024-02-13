@@ -69,7 +69,7 @@ stages:
       - template: jenkins-codesign/signType.v1.yml@templates
         parameters:
           CodeSignOverride: "$(Xamarin.CodeSignOverride)"
-    
+
     - ${{ if eq(parameters.EnableCodeSign, true) }}:
       - task: MicroBuildSigningPlugin@4
         displayName: "Prepare Signing Tools (MicroBuild)"
