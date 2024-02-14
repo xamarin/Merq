@@ -4,14 +4,17 @@ stages:
 - stage: Upload
   dependsOn:
   - Build
-  - Compliance
   jobs:
   - job: Upload
-    pool:
-      name: AzurePipelines-EO
-      demands:
-      - ImageOverride -equals AzurePipelinesWindows2022compliant
-
+    templateContext:
+      outputs:
+      - output: nuget
+        displayName: 'Push Packages'
+        condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), eq(variables['PushPackages'], 'true')))
+        packageParentPath: '$(Build.ArtifactStagingDirectory)'
+        packagesToPush: $(Build.ArtifactStagingDirectory)/package/*.nupkg
+        nuGetFeedType: external
+        publishFeedCredentials: 'xamarin-impl public feed'
     steps:
     - checkout: self
 
@@ -23,23 +26,13 @@ stages:
     - script: 'dotnet tool update -g --version 7.0.0 PowerShell >nul || dotnet tool list -g'
       displayName: UsePowerShell
 
-    - task: DownloadBuildArtifacts@0
+    - task: DownloadPipelineArtifact@2
       inputs:
         artifactName: package
+        targetPath: $(Build.ArtifactStagingDirectory)/package
 
-    - template: dump-environment.yml@templates
     - template: upload-to-storage/win/v1.yml@templates
       parameters:
         ArtifactsDirectory: '$(Build.ArtifactStagingDirectory)/package'
         Azure.ContainerName: 'xvs-merq'
         GitHub.Context: 'artifacts'
-
-    - task: NuGetCommand@2
-      displayName: Push Packages
-      continueOnError: true
-      condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), eq(variables['PushPackages'], 'true')))
-      inputs:
-        command: push
-        packagesToPush: $(Build.ArtifactStagingDirectory)/package/*.nupkg
-        nuGetFeedType: external
-        publishFeedCredentials: 'xamarin-impl public feed'
