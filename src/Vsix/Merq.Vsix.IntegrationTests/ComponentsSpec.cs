@@ -20,14 +20,14 @@ namespace Merq
 		{
 			ThreadHelper.ThrowIfNotOnUIThread();
 
-			var stream = ServiceProvider.GlobalProvider.GetService<SComponentModel, IComponentModel>().GetService<IEventStream>();
+			var stream = ServiceProvider.GlobalProvider.GetService<SComponentModel, IComponentModel>().GetService<IMessageBus>();
 			var expected = new FooEvent();
 
 			FooEvent actual = null;
 
-			var subscription = stream.Of<FooEvent>().Subscribe(e => actual = e);
+			var subscription = stream.Observe<FooEvent>().Subscribe(e => actual = e);
 
-			stream.Push(expected);
+			stream.Notify(expected);
 
 			Assert.Same(expected, actual);
 		}
@@ -37,7 +37,7 @@ namespace Merq
 		{
 			ThreadHelper.ThrowIfNotOnUIThread();
 
-			var commands = ServiceProvider.GlobalProvider.GetService<SComponentModel, IComponentModel>().GetService<ICommandBus>();
+			var commands = ServiceProvider.GlobalProvider.GetService<SComponentModel, IComponentModel>().GetService<IMessageBus>();
 
 			Assert.False(commands.CanHandle(new FooCommand()));
 			Assert.False(commands.CanHandle<FooAsyncCommand>());
