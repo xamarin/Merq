@@ -31,12 +31,6 @@ stages:
         artifactName: package
         targetPath: $(Build.ArtifactStagingDirectory)/package
 
-    - template: upload-to-storage/win/v1.yml@templates
-      parameters:
-        ArtifactsDirectory: '$(Build.ArtifactStagingDirectory)/package'
-        Azure.ContainerName: 'xvs-merq'
-        GitHub.Context: 'artifacts'
-
     # This step is required to override the apitoken for 'xamarin-impl public feed' with a federated token from 'xamarin-impl-public-feed'
     - task: AzureCLI@2
       displayName: 'Set Xamarin Impl token'
