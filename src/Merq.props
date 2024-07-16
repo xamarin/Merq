@@ -32,6 +32,11 @@
 
 		<Version>0.0.0</Version>
 	</PropertyGroup>
+
+	<PropertyGroup>
+		<MicrosoftIORedistVersion>6.0.1</MicrosoftIORedistVersion>
+		<SystemTextJsonVersion>8.0.4</SystemTextJsonVersion>
+	</PropertyGroup>
 	
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
 		<Optimize>false</Optimize>
