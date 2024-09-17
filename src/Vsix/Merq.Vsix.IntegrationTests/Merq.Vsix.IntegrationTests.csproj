@@ -19,12 +19,6 @@
     <PackageReference Include="Merq" Version="1.5.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="Microsoft.ComponentModel.Composition.Diagnostics">
-      <HintPath>..\..\..\lib\Microsoft.ComponentModel.Composition.Diagnostics.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
   <Target Name="RemoveResolvedLockFileAnalyzers" AfterTargets="ResolveLockFileAnalyzers">
     <ItemGroup>
       <ResolvedAnalyzers Remove="@(ResolvedAnalyzers)" />
