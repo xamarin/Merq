@@ -46,6 +46,11 @@ extends:
       tsa:
         enabled: true
         configFile: $(System.DefaultWorkingDirectory)\build\tsaoptions-v2.json
+      codeSignValidation:
+        break: true
+        targetPathExclusionPattern: \"**\*.xml\"
+        ${{ if not(and(eq(variables['Build.Reason'], 'IndividualCI'), eq(variables['Build.SourceBranch'], 'refs/heads/main'))) }}:
+          policyFile: $(MBSIGN_APPFOLDER)\CSVTestSignPolicy.xml
     pool:
       name: AzurePipelines-EO
       image: 1ESPT-Windows2022
