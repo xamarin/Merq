@@ -21,6 +21,14 @@ pr:
   - d16-*
   - d17-*
 
+schedules:
+- cron: "0 0 1,15 * *" # Runs at midnight (UTC) on the 1st and 15th of every month
+  displayName: "Twice a Month Schedule"
+  branches:
+    include:
+      - main
+  always: true    # Ensures it runs even if there are no code changes
+
 variables:
 - template: /build/variables.yml@self
 
