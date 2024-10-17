@@ -65,4 +65,3 @@ extends:
       os: windows
     stages:
     - template: /build/stages/build.yml@self
-    - template: /build/stages/upload.yml@self
